@@ -18,12 +18,12 @@ def getLastPathParts(paths):
 
 def addPartitions(tableName, pathBase, insertdates, dbName):
     statement = 'USE %s; ' % dbName;
-    statement += 'ALTER TABLE %s ADD IF NOT EXISTS ' % tableName;
     for insertdate in insertdates:
+        statement += 'ALTER TABLE %s ADD IF NOT EXISTS ' % tableName;
         (year, month, day) = insertdate
         path = pathBase + '/%s/%s/%s' % (year, month, day)
         insertdateStr = '%s-%s-%s' % (year, month, day)
-        statement += 'PARTITION (insertdate = \'%s\') LOCATION \'%s\' ' % (insertdateStr, path)
+        statement += 'PARTITION (insertdate = \'%s\') LOCATION \'%s\'; ' % (insertdateStr, path)
     print statement
     cmd = 'hive -e "%s"' % statement
     os.system(cmd)
